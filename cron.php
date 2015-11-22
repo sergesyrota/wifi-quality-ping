@@ -11,7 +11,7 @@ while ($hostData = $res->fetch_array()) {
     $pidFile = $_config['pidFilePath'] . '/' . $hostData['id'];;
 
     // Check if we have fresh data for host
-    $dataCheck = $db->fetchOne("SELECT time FROM `ping-result` ORDER BY id DESC LIMIT 1");
+    $dataCheck = $db->fetchOne("SELECT time FROM `ping-result` WHERE host_id = {$hostData['id']} ORDER BY id DESC LIMIT 1");
     if ((time() - strtotime($dataCheck['time'])) < 5) {
         // Fresh data, no need to do anything. Next host please!
         continue;
