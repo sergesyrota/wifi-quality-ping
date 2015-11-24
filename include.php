@@ -1,8 +1,13 @@
 <?php
 
 $_config = [
-    'pidFilePath' => __DIR__ . '/run'
+    'pidFilePath' => __DIR__ . '/run',
+    'envFile' => __DIR__ . '/run/env',
 ];
+
+if (is_readable($_config['envFile'])) {
+    putenv(file_get_contents($_config['envFile']));
+}
 
 class MyDb
 {
