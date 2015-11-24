@@ -35,4 +35,14 @@ class MyDb
         $res = $this->query($q);
         return $res->fetch_array();
     }
+    
+    public function fetchCol($q)
+    {
+        $res = $this->query($q);
+        $return = [];
+        while ($row = $res->fetch_array()) {
+            $return[] = $row[0];
+        }
+        return $return;
+    }
 }
