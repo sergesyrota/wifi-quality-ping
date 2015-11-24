@@ -1,0 +1,81 @@
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+</head>
+<body>
+<div id="container" style="min-width: 310px; height: 100%; margin: 0 auto"></div>
+<script>
+$(function () {
+    $.ajaxSetup({
+        async: false
+    });
+
+    var graphData = [];
+
+
+    // Get data
+    $.getJSON('getGraphData.php' + window.location.search, function(response){
+        graphData = response;
+    });
+
+    $('#container').highcharts({
+        chart: {
+            type: 'spline',
+            zoomType: 'xy'
+        },
+        title: {
+            text: graphData.host,
+            x: -20 //center
+        },
+        xAxis: {
+            categories: graphData.time,
+            labels: {
+                enabled: false
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'ms per set',
+                enabled: false
+            },
+            labels: {
+                format: "{value:,.0f}"
+            },
+            min: 0,
+            max: 1000
+        },
+        tooltip: {
+            pointFormat: '{point.y:,.0f}ms'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'Average',
+            data: graphData.avg,
+        },{
+            name: '80th Percentile',
+            data: graphData.perc80,
+        },{
+            name: '90th Percentile',
+            data: graphData.perc90,
+        },{
+            name: 'PercentTimeout*10',
+            data: graphData.percent_timeout,
+        }],
+        plotOptions: {
+            series: {
+                animation: false
+            }
+        }
+    });
+});
+//]]>
+
+</script>
+
+</body>
